@@ -25,7 +25,7 @@ def part_two(puzzle_input: list[int]) -> int:
 if __name__ == '__main__':
 
     with open('data/day01_input.txt') as f:
-        puzzle_input = [int(n) for n in f.readlines()]
+        puzzle_input = [int(n) for n in f.readlines() if n]
 
     print(f'part one answer: {part_one(puzzle_input)}')
-    print(f'part one answer: {part_two(puzzle_input)}')
+    print(f'part two answer: {part_two(puzzle_input)}')
