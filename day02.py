@@ -1,4 +1,4 @@
-def part_one(puzzle_input):
+def part_one(puzzle_input: list[tuple[str, int]]) -> int:
     horizontal = 0
     vertical = 0
 
@@ -6,16 +6,16 @@ def part_one(puzzle_input):
         direction, distance = line
 
         if direction == 'forward':
-            horizontal += int(distance)
+            horizontal += distance
         elif direction == 'down':
-            vertical += int(distance)
+            vertical += distance
         elif direction == 'up':
-            vertical -= int(distance)
+            vertical -= distance
 
     return horizontal * vertical
 
 
-def part_two(puzzle_input):
+def part_two(puzzle_input: list[tuple[str, int]]) -> int:
     horizontal = 0
     vertical = 0
     aim = 0
@@ -24,12 +24,12 @@ def part_two(puzzle_input):
         direction, distance = line
 
         if direction == 'forward':
-            horizontal += int(distance)
-            vertical += aim * int(distance)
+            horizontal += distance
+            vertical += aim * distance
         elif direction == 'down':
-            aim += int(distance)
+            aim += distance
         elif direction == 'up':
-            aim -= int(distance)
+            aim -= distance
 
     return horizontal * vertical
 
@@ -37,7 +37,12 @@ def part_two(puzzle_input):
 if __name__ == '__main__':
 
     with open('data/day02_input.txt') as f:
-        puzzle_input = [l.strip().split(" ") for l in f.readlines() if l]
+        puzzle_input = []
+        for line in f.readlines():
+            if not line:
+                continue
+            line_parts = line.strip().split(" ")
+            puzzle_input.append((line_parts[0], int(line_parts[1])))
 
     print(f'part one answer: {part_one(puzzle_input)}')
     print(f'part two answer: {part_two(puzzle_input)}')
