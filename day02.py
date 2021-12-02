@@ -5,12 +5,15 @@ def part_one(puzzle_input: list[tuple[str, int]]) -> int:
     for line in puzzle_input:
         direction, distance = line
 
-        if direction == 'forward':
-            horizontal += distance
-        elif direction == 'down':
-            vertical += distance
-        elif direction == 'up':
-            vertical -= distance
+        match direction:
+            case 'forward':
+                horizontal += distance
+            case 'down':
+                vertical += distance
+            case 'up':
+                vertical -= distance
+            case _:
+                pass
 
     return horizontal * vertical
 
@@ -23,13 +26,16 @@ def part_two(puzzle_input: list[tuple[str, int]]) -> int:
     for line in puzzle_input:
         direction, distance = line
 
-        if direction == 'forward':
-            horizontal += distance
-            vertical += aim * distance
-        elif direction == 'down':
-            aim += distance
-        elif direction == 'up':
-            aim -= distance
+        match direction:
+            case 'forward':
+                horizontal += distance
+                vertical += aim * distance
+            case 'down':
+                aim += distance
+            case 'up':
+                aim -= distance
+            case _:
+                pass
 
     return horizontal * vertical
 
