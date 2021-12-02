@@ -1,26 +1,26 @@
 def part_one(puzzle_input: list[tuple[str, int]]) -> int:
-    horizontal = 0
-    vertical = 0
+    horizontal_position = 0
+    depth = 0
 
     for line in puzzle_input:
         direction, distance = line
 
         match direction:
             case 'forward':
-                horizontal += distance
+                horizontal_position += distance
             case 'down':
-                vertical += distance
+                depth += distance
             case 'up':
-                vertical -= distance
+                depth -= distance
             case _:
                 pass
 
-    return horizontal * vertical
+    return horizontal_position * depth
 
 
 def part_two(puzzle_input: list[tuple[str, int]]) -> int:
-    horizontal = 0
-    vertical = 0
+    horizontal_position = 0
+    depth = 0
     aim = 0
 
     for line in puzzle_input:
@@ -28,8 +28,8 @@ def part_two(puzzle_input: list[tuple[str, int]]) -> int:
 
         match direction:
             case 'forward':
-                horizontal += distance
-                vertical += aim * distance
+                horizontal_position += distance
+                depth += aim * distance
             case 'down':
                 aim += distance
             case 'up':
@@ -37,7 +37,7 @@ def part_two(puzzle_input: list[tuple[str, int]]) -> int:
             case _:
                 pass
 
-    return horizontal * vertical
+    return horizontal_position * depth
 
 
 if __name__ == '__main__':
