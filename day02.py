@@ -1,3 +1,7 @@
+from timer import print_time
+
+
+@print_time
 def part_one(puzzle_input: list[tuple[str, int]]) -> int:
     horizontal_position = 0
     depth = 0
@@ -18,6 +22,7 @@ def part_one(puzzle_input: list[tuple[str, int]]) -> int:
     return horizontal_position * depth
 
 
+@print_time
 def part_two(puzzle_input: list[tuple[str, int]]) -> int:
     horizontal_position = 0
     depth = 0

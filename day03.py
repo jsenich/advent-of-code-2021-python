@@ -1,7 +1,10 @@
 import numpy as np
 from copy import deepcopy
 
+from timer import print_time
 
+
+@print_time
 def part_one(puzzle_input: list[list[int]]) -> int:
     diagnostics_report = np.array(puzzle_input).T
 
@@ -18,6 +21,7 @@ def part_one(puzzle_input: list[list[int]]) -> int:
     return gamma_rate * epsilon_rate
 
 
+@print_time
 def part_two(puzzle_input: list[list[int]]) -> int:
     def get_diagnostics(raw_report: list[list[int]]) -> tuple[list[int], list[int]]:
         diagnostics_report = np.array(raw_report).T

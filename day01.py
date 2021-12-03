@@ -1,3 +1,7 @@
+from timer import print_time
+
+
+@print_time
 def part_one(puzzle_input: list[int]) -> int:
     increasedCount = 0
     for i, depth in enumerate(puzzle_input):
@@ -8,6 +12,7 @@ def part_one(puzzle_input: list[int]) -> int:
     return increasedCount
 
 
+@print_time
 def part_two(puzzle_input: list[int]) -> int:
     increasedCount = 0
 
