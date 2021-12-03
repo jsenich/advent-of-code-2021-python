@@ -1,5 +1,4 @@
 import numpy as np
-from collections import Counter
 from copy import deepcopy
 
 
@@ -9,8 +8,7 @@ def part_one(puzzle_input: list[list[int]]) -> int:
     most_common = []
     least_common = []
     for line in diagnostics_report:
-        m = Counter(line)
-        line_most_common = m.most_common(1)[0][0]
+        line_most_common = np.bincount(line).argmax()
         most_common.append(line_most_common)
         least_common.append(abs(line_most_common - 1))
 
@@ -26,17 +24,20 @@ def part_two(puzzle_input: list[list[int]]) -> int:
         most_common = []
         least_common = []
         for line in diagnostics_report:
-            m = Counter(line)
-            if m[0] == m[1]:
-                line_most_common = 1
+            _, bit_counts = np.unique(line, return_counts=True)
+            if len(bit_counts) == 1:
+                most_common.append(bit_counts[0])
+            elif bit_counts[0] <= bit_counts[1]:
+                most_common.append(1)
             else:
-                line_most_common = m.most_common(1)[0][0]
-            most_common.append(line_most_common)
+                most_common.append(0)
 
-            if m[0] == m[1]:
+            if len(bit_counts) == 1:
+                least_common.append(abs(bit_counts[0] - 1))
+            elif bit_counts[0] <= bit_counts[1]:
                 least_common.append(0)
             else:
-                least_common.append(abs(line_most_common - 1))
+                least_common.append(1)
 
         return most_common, least_common
 
