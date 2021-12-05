@@ -1,20 +1,21 @@
 import numpy as np
 
 
-def part_one(puzzle_input):
+def part_one(puzzle_input: str) -> int:
     numbers, boards = extract_puzzle_input(puzzle_input)
 
     winning_num, winning_board = play_bingo(numbers, boards)
 
     unmarked_sum = 0
-    for line in winning_board:
+    for line in winning_board or []:
         unmarked_sum += sum(n for n in line if n != -1)
 
     result = unmarked_sum * winning_num
 
     return result
 
-def part_two(puzzle_input):
+
+def part_two(puzzle_input: str) -> int:
     numbers, boards = extract_puzzle_input(puzzle_input)
 
     winning_boards = play_bingo_last_winner(numbers, boards)
@@ -29,8 +30,7 @@ def part_two(puzzle_input):
     return result
 
 
-
-def play_bingo(numbers, boards):
+def play_bingo(numbers: list[int], boards: np.ndarray) -> tuple[int | None, np.ndarray | None]:
     marked_boards = np.copy(boards)
 
     for i, num in enumerate(numbers):
@@ -46,7 +46,7 @@ def play_bingo(numbers, boards):
     return None, None
 
 
-def play_bingo_last_winner(numbers, boards):
+def play_bingo_last_winner(numbers: list[int], boards: np.ndarray):
     marked_boards = np.copy(boards)
     winning_boards = []
     seen_winners = set()
@@ -72,7 +72,7 @@ def is_winning_board(board) -> bool:
     return -5 in np.sum(board, 0) or -5 in np.sum(board, 1)
 
 
-def extract_puzzle_input(puzzle_input):
+def extract_puzzle_input(puzzle_input: str) -> tuple[list[int], np.ndarray]:
     drawn_numbers = []
     boards = []
 
@@ -96,32 +96,6 @@ def extract_puzzle_input(puzzle_input):
 
 
 if __name__ == '__main__':
-
-#     test_input = """
-# 7,4,9,5,11,17,23,2,0,14,21,24,10,16,13,6,15,25,12,22,18,20,8,19,3,26,1
-
-# 22 13 17 11  0
-#  8  2 23  4 24
-# 21  9 14 16  7
-#  6 10  3 18  5
-#  1 12 20 15 19
-
-#  3 15  0  2 22
-#  9 18 13 17  5
-# 19  8  7 25 23
-# 20 11 10 24  4
-# 14 21 16 12  6
-
-# 14 21 17 24  4
-# 10 16 15  9 19
-# 18  8 23 26 20
-# 22 11 13  6  5
-#  2  0 12  3  7
-
-# """
-
-
-    # puzzle_input = test_input.strip()
     with open('data/day04_input.txt') as f:
         puzzle_input = f.read().strip()
 
