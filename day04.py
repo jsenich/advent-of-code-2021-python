@@ -1,29 +1,31 @@
 import numpy as np
 
+from timer import print_time
 
+
+@print_time
 def part_one(puzzle_input: str) -> int:
     numbers, boards = extract_puzzle_input(puzzle_input)
 
     winning_num, winning_board = play_bingo(numbers, boards)
+    if winning_board is None:
+        return 0
 
-    unmarked_sum = 0
-    for line in winning_board or []:
-        unmarked_sum += sum(n for n in line if n != -1)
+    unmarked_sum = winning_board[winning_board != -1].sum()
 
     result = unmarked_sum * winning_num
 
     return result
 
 
+@print_time
 def part_two(puzzle_input: str) -> int:
     numbers, boards = extract_puzzle_input(puzzle_input)
 
     winning_boards = play_bingo_last_winner(numbers, boards)
 
-    unmarked_sum = 0
     last_winning_num, winning_board = winning_boards[-1]
-    for line in winning_board:
-        unmarked_sum += sum(n for n in line if n != -1)
+    unmarked_sum = winning_board[winning_board != -1].sum()
 
     result = unmarked_sum * last_winning_num
 
