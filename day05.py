@@ -1,18 +1,24 @@
 from collections import Counter
-# from math import atan2, degrees
+
+from timer import print_time
 
 
-def part_one(puzzle_input):
-
-    coordinates = []
-    touched_points = []
-
+def extract_line_points(puzzle_input: str) -> list[list[tuple[int, int]]]:
+    coordinate_pairs = []
     for line in puzzle_input.split("\n"):
         pairs = line.split(" -> ")
         x1, y1 = pairs[0].split(",")
         x2, y2 = pairs[1].split(",")
 
-        coordinates.append([(int(x1), int(y1)), (int(x2), int(y2))])
+        coordinate_pairs.append([(int(x1), int(y1)), (int(x2), int(y2))])
+
+    return coordinate_pairs
+
+
+@print_time
+def part_one(puzzle_input: str) -> int:
+    coordinates = extract_line_points(puzzle_input)
+    touched_points = []
 
     for c in coordinates:
         x1, y1 = c[0]
@@ -39,42 +45,21 @@ def part_one(puzzle_input):
 
     overlapping_counts = Counter(touched_points)
 
-    counter = 0
-    for c in overlapping_counts.values():
-        if c >= 2:
-            counter += 1
+    counter = sum(1 for c in overlapping_counts.values() if c > 1)
 
     return counter
 
 
-def part_two(puzzle_input):
-
-    coordinates = []
+@print_time
+def part_two(puzzle_input: str) -> int:
+    coordinates = extract_line_points(puzzle_input)
     touched_points = []
-
-    grid = []
-    for i in range(10):
-        grid.append([])
-        for _ in range(10):
-            grid[i].append('.')
-
-    for line in puzzle_input.split("\n"):
-        pairs = line.split(" -> ")
-        x1, y1 = pairs[0].split(",")
-        x2, y2 = pairs[1].split(",")
-
-        coordinates.append([(int(x1), int(y1)), (int(x2), int(y2))])
 
     for c in coordinates:
         x1, y1 = c[0]
         x2, y2 = c[1]
 
         if y1 != y2 and x1 != x2:
-            # angle = degrees(atan2(y1-y2, x1-x2))
-            # if abs(angle) != 45:
-            #     # only consider 45 degree lines
-            #     continue
-
             if x1 > x2:
                 x_range = range(x1, x2 - 1, -1)
             else:
@@ -106,44 +91,17 @@ def part_two(puzzle_input):
                     touched_points.append((x, y2))
 
     overlapping_counts = Counter(touched_points)
-
-    # for point in touched_points:
-    #     if grid[point[1]][point[0]] == '.':
-    #         grid[point[1]][point[0]] = 1
-    #     else:
-    #         grid[point[1]][point[0]] += 1
-
-    # for row in grid:
-    #     print(' '.join([str(n) for n in row]))
-    # print("\n\n\n")
-
-    counter = 0
-    for c in overlapping_counts.values():
-        if c >= 2:
-            counter += 1
+    counter = sum(1 for c in overlapping_counts.values() if c > 1)
 
     return counter
 
 
 if __name__ == '__main__':
-
-    puzzle_input = """
-0,9 -> 5,9
-8,0 -> 0,8
-9,4 -> 3,4
-2,2 -> 2,1
-7,0 -> 7,4
-6,4 -> 2,0
-0,9 -> 2,9
-3,4 -> 1,4
-0,0 -> 8,8
-5,5 -> 8,2
-""".strip()
-
-
-
     with open('data/day05_input.txt') as f:
         puzzle_input = f.read().strip()
 
     print(f'part one answer: {part_one(puzzle_input)}')
     print(f'part two answer: {part_two(puzzle_input)}')
+
+# part one answer: 5576
+# part two answer: 18144
