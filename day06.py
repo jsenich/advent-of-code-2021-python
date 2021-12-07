@@ -1,48 +1,46 @@
 import numpy as np
 
-
-def part_one(puzzle_input):
-    fish_timers = [int(n) for n in puzzle_input.split(',')]
-
-    for i, _ in enumerate(range(80), 1):
-        timers = []
-        new_fish = []
-        for d in fish_timers:
-            if d == 0:
-                new_fish.append(8)
-                timers.append(6)
-            else:
-                timers.append(d - 1)
-        fish_timers = timers
-        fish_timers.extend(new_fish)
-
-    return len(fish_timers)
+from timer import print_time
 
 
-def part_two(puzzle_input):
-    fish_timers = np.zeros(9, dtype=np.int64)
-    np.add.at(fish_timers, np.fromstring(puzzle_input, dtype=np.int64, sep=','), 1)
+def calculate_fish_population(spawn_timer_data: str, days: int) -> np.int64:
+    fish_spawn_timers = np.zeros(9, dtype=np.int64)
+    np.add.at(
+        fish_spawn_timers,
+        np.fromstring(puzzle_input, dtype=np.int64, sep=','),
+        1
+    )
 
-    for _ in range(256):
+    for _ in range(days):
         new_fish = 0
-        for internal_timer, value_count in enumerate(fish_timers):
+        for internal_timer, value_count in enumerate(fish_spawn_timers):
             if internal_timer == 0:
                 new_fish = value_count
             else:
-                fish_timers[internal_timer - 1] = value_count
+                fish_spawn_timers[internal_timer - 1] = value_count
 
-        fish_timers[6] += new_fish
-        fish_timers[8] = new_fish
+        fish_spawn_timers[6] += new_fish
+        fish_spawn_timers[8] = new_fish
 
-    return fish_timers.sum()
+    return fish_spawn_timers.sum()
+
+
+@print_time
+def part_one(puzzle_input):
+    return calculate_fish_population(puzzle_input, 80)
+
+
+@print_time
+def part_two(puzzle_input):
+    return calculate_fish_population(puzzle_input, 256)
 
 
 if __name__ == '__main__':
-
-    puzzle_input = "3,4,3,1,2"
-
     with open('data/day06_input.txt') as f:
         puzzle_input = f.read().strip()
 
     print(f'part one answer: {part_one(puzzle_input)}')
     print(f'part two answer: {part_two(puzzle_input)}')
+
+# part one answer: 355386
+# part two answer: 1613415325809
