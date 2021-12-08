@@ -1,5 +1,7 @@
 import numpy as np
 
+from timer import print_time
+
 
 def part_one(puzzle_input: str) -> int:
     crab_positions = np.fromstring(puzzle_input, dtype=np.int32, sep=',')
@@ -18,6 +20,7 @@ def part_one(puzzle_input: str) -> int:
     return np.min(total_fuel_costs)
 
 
+@print_time
 def part_two(puzzle_input: str) -> int:
     crab_positions: np.ndarray = np.fromstring(puzzle_input, dtype=np.int32, sep=',')
     min_pos = crab_positions.min()
@@ -31,19 +34,6 @@ def part_two(puzzle_input: str) -> int:
                 continue
             fuel_spent[j] = sum(range(1, abs(jpos - pos) + 1))
         total_fuel_costs[i] = fuel_spent.sum()
-
-    # crab_length = len(crab_positions)
-    # total_fuel_costs = np.zeros(crab_length, dtype=np.int32)
-
-
-    # for i, pos in enumerate(crab_positions):
-    #     fuel_spent = np.zeros(crab_length, dtype=np.int32)
-
-    #     for j, jpos in enumerate(crab_positions):
-    #         if i == j:
-    #             continue
-    #         fuel_spent[j] = sum(range(1, abs(jpos - 5) + 1))
-    #     total_fuel_costs[i] = fuel_spent.sum()
 
     return np.min(total_fuel_costs)
 
