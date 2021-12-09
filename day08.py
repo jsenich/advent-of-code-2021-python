@@ -1,5 +1,4 @@
-import numpy as np
-
+KNOWN_PATTERN_LENGTHS = [2, 4, 3, 7]
 
 segment_lengths = {
     2: [1],
@@ -12,20 +11,21 @@ segment_lengths = {
 
 
 def part_one(puzzle_input: str) -> int:
-    counter = 0
+    easy_digits = 0
     for line in puzzle_input.split("\n"):
         _, outputs = line.split("|")
-        for o in outputs.strip().split():
-            if len(o) in (2, 4, 3, 7):
-                counter += 1
 
-    return counter
+        easy_digits += sum(
+            [1 for o in outputs.strip().split() if len(o) in KNOWN_PATTERN_LENGTHS]
+        )
+
+    return easy_digits
 
 
 def resolve_segments(patterns: list[str], outputs: list[str]) -> int:
     digit_pattern = {}
-    number_positions = np.full(10, -1, dtype=np.int32)
-    b_left = u_right = ''
+    b_left = set()
+    u_right = set()
 
     six_segments = []
     five_segments = []
@@ -33,9 +33,8 @@ def resolve_segments(patterns: list[str], outputs: list[str]) -> int:
     # known numbers
     for i, pattern in enumerate(patterns):
         pattern_len = len(pattern)
-        if pattern_len in (2, 3, 4, 7):
+        if pattern_len in KNOWN_PATTERN_LENGTHS:
             digit_pattern[segment_lengths[pattern_len][0]] = set(pattern)
-            number_positions[i] = segment_lengths[pattern_len][0]
         elif pattern_len == 6:
             six_segments.append(pattern)
         elif pattern_len == 5:
@@ -74,7 +73,7 @@ def resolve_segments(patterns: list[str], outputs: list[str]) -> int:
         for pattern in five_segments:
             diff = digit_pattern[8] - set(pattern)
 
-            if len(diff - u_right.union(b_left)) == 0:
+            if len(diff - (u_right | b_left)) == 0:
                 #  this is a five
                 digit_pattern[5] = set(pattern)
                 to_remove = pattern
@@ -104,7 +103,6 @@ def resolve_segments(patterns: list[str], outputs: list[str]) -> int:
     return output
 
 
-
 def part_two(puzzle_input: str) -> int:
     all_outputs = []
     for line in puzzle_input.split("\n"):
@@ -116,8 +114,6 @@ def part_two(puzzle_input: str) -> int:
     return sum(all_outputs)
 
 
-
-
 if __name__ == '__main__':
     # puzzle_input = "acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf"
 
@@ -126,3 +122,6 @@ if __name__ == '__main__':
 
     print(f'part one answer: {part_one(puzzle_input)}')
     print(f'part two answer: {part_two(puzzle_input)}')
+
+    # part one: 321
+    # part two: 1028926
