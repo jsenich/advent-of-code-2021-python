@@ -1,3 +1,7 @@
+import sys
+from collections import defaultdict
+
+
 import numpy as np
 
 
@@ -27,6 +31,42 @@ def part_one(puzzle_input: str) -> int:
     return sum(risk_levels)
 
 
+def part_two(puzzle_input):
+    height_map = defaultdict(lambda: 9)
+    for row, line in enumerate(puzzle_input.splitlines()):
+        for col, num in enumerate(line):
+            height_map[(row, col)] = int(num)
+
+    basin_sizes = []
+
+    for (row, col), height in tuple(height_map.items()):
+        if (
+            height_map[row, col + 1] > height and
+            height_map[row, col - 1] > height and
+            height_map[row + 1, col] > height and
+            height_map[row - 1, col] > height
+        ):
+            basin_points = set()
+            points_to_add = [(row, col)]
+            while points_to_add:
+                row, col = points_to_add.pop()
+                basin_points.add((row, col))
+                for point in (
+                    (row, col + 1),
+                    (row, col - 1),
+                    (row + 1, col),
+                    (row - 1, col),
+                ):
+                    if point not in basin_points and height_map[point] != 9:
+                        points_to_add.append(point)
+
+            basin_sizes.append(len(basin_points))
+
+    basin_sizes_sorted = sorted(basin_sizes)
+
+    return basin_sizes_sorted[-1] * basin_sizes_sorted[-2] * basin_sizes_sorted[-3]
+
+
 if __name__ == '__main__':
 
     puzzle_input = """\
@@ -40,5 +80,5 @@ if __name__ == '__main__':
     with open('data/day09_input.txt') as f:
         puzzle_input = f.read().strip()
 
-    print(f'part one answer: {part_one(puzzle_input)}')
-    # print(f'part two answer: {part_two(puzzle_input)}')
+    # print(f'part one answer: {part_one(puzzle_input)}')
+    print(f'part two answer: {part_two(puzzle_input)}')
