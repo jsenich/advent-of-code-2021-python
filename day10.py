@@ -1,6 +1,4 @@
 from collections import deque
-from copy import copy
-
 
 CLOSING_MAP = {
     '(': ')',
