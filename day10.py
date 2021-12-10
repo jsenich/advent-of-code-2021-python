@@ -45,37 +45,28 @@ def part_two(puzzle_input: str) -> int:
     }
     scores = []
     puzzle_lines = puzzle_input.splitlines()
-    incomplete_lines = copy(puzzle_lines)
     for line in puzzle_lines:
         chars = list(line)
         opening_chars = deque()
+        skip_line = False
         for i, c in enumerate(chars):
             if c in OPENING_CHARACTERS:
                 opening_chars.append(c)
             else:
                 if c != CLOSING_MAP[opening_chars[-1]]:
-                    incomplete_lines.remove(line)
+                    skip_line = True
                     break
                 else:
                     opening_chars.pop()
+        if not skip_line:
+            closing = list(reversed([CLOSING_MAP[c] for c in opening_chars]))
 
-    for line in incomplete_lines:
-        chars = list(line)
-        opening_chars = deque()
-        for i, c in enumerate(chars):
-            if c in OPENING_CHARACTERS:
-                opening_chars.append(c)
-            else:
-                opening_chars.pop()
+            line_score = 0
 
-        closing = list(reversed([CLOSING_MAP[c] for c in opening_chars]))
+            for c in closing:
+                line_score = (line_score * 5) + score_map[c]
 
-        line_score = 0
-
-        for c in closing:
-            line_score = (line_score * 5) + score_map[c]
-
-        scores.append(line_score)
+            scores.append(line_score)
 
     scores = sorted(scores)
 
