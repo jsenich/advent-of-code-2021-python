@@ -1,4 +1,3 @@
-from collections import defaultdict
 import numpy as np
 
 
@@ -69,6 +68,55 @@ def part_one(puzzle_input: str) -> int:
     return flash_total
 
 
+def part_two(puzzle_input: str) -> int:
+    flash_total = 0
+    energy_levels = np.array([[int(i) for i in line] for line in puzzle_input.splitlines()])
+
+    step = 0
+    while True:
+        step += 1
+        flashed = []
+
+        for r, row in enumerate(energy_levels):
+            for c, _ in enumerate(row):
+                energy_levels[r][c] += 1
+                if energy_levels[r][c] > 9:
+                    flashed.append((r, c))
+
+        while flashed:
+            r, c = flashed.pop()
+            if energy_levels[r][c] == 0:
+                continue
+            energy_levels[r][c] = 0
+            flash_total += 1
+
+            # check adjacent
+            for r2, c2 in (
+                (r - 1, c),
+                (r - 1, c - 1),
+                (r - 1, c + 1),
+                (r + 1, c + 1),
+                (r + 1, c - 1),
+                (r + 1, c),
+                (r, c - 1),
+                (r, c + 1),
+            ):
+                if -1 in (r2, c2):
+                    continue
+                elif r2 == len(energy_levels) or c2 == len(energy_levels[0]):
+                    continue
+
+                if energy_levels[r2][c2] != 0:
+                    energy_levels[r2][c2] += 1
+                    if energy_levels[r2][c2] > 9:
+                        flashed.append((r2, c2))
+
+        if energy_levels.sum() == 0:
+            break
+
+    return step
+
+
 if __name__ == '__main__':
 
     puzzle_input = """\
@@ -88,4 +136,4 @@ if __name__ == '__main__':
         puzzle_input = f.read().strip()
 
     print(f'part one answer: {part_one(puzzle_input)}')
-    # print(f'part two answer: {part_two(puzzle_input)}')
+    print(f'part two answer: {part_two(puzzle_input)}')
